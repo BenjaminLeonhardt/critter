@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class EmployeeService {
@@ -28,7 +29,11 @@ public class EmployeeService {
     }
 
     public List<Employee> findEmployeesForService(Employee employee) {
-        List<Employee> employeeList = new ArrayList<>();// = employeeRepository.findEmployeesForService(employee);
+        Set<EmployeeSkill> skills = employee.getSkills();
+        List<Employee> employeeList = new ArrayList<>();
+        for(EmployeeSkill skill: skills){
+            employeeList = employeeRepository.findEmployeesForService(employee.getId());
+        }
         return employeeList;
     }
 }

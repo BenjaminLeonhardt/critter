@@ -27,6 +27,10 @@ public class PetController {
     public PetDTO savePet(@RequestBody PetDTO petDTO) {
         Pet pet = convertPetDTOToEntity(petDTO);
         Customer customer = customerService.get(petDTO.getOwnerId());
+        if(customer.getPetList()==null){
+            customer.setPetList(new ArrayList<Pet>());
+        }
+        customer.getPetList().add(pet);
         pet.setOwner(customer);
         Pet petNew = petService.save(pet);
         return convertEntityToPetDTO(petNew);
@@ -50,12 +54,30 @@ public class PetController {
 
     @GetMapping("/owner/{ownerId}")
     public List<PetDTO> getPetsByOwner(@PathVariable long ownerId) {
-        throw new UnsupportedOperationException();
+        List<Pet> petList = petService.getPetsByOwner(ownerId);
+        List<PetDTO> petDTOList = new ArrayList<>();
+        for(Pet pet:petList){
+            petDTOList.add(convertEntityToPetDTO(pet));
+        }
+        return petDTOList;
     }
+
+
+
+
+
+
+
+
+    /*
+     * converter for DTOs
+     * */
+
 
     private static PetDTO convertEntityToPetDTO(Pet pet){
         PetDTO petDTO = new PetDTO();
         BeanUtils.copyProperties(pet,petDTO);
+        petDTO.setOwnerId(pet.getOwner().getId());
         return petDTO;
     }
 

@@ -63,7 +63,9 @@ public class UserController {
 
     @PutMapping("/employee/{employeeId}")
     public void setAvailability(@RequestBody Set<DayOfWeek> daysAvailable, @PathVariable long employeeId) {
-        throw new UnsupportedOperationException();
+        Employee employee = employeeService.get(employeeId);
+        employee.setDaysAvailable(daysAvailable);
+        employeeService.save(employee);
     }
 
     @GetMapping("/employee/availability")
@@ -78,6 +80,19 @@ public class UserController {
         return employeeDTOList;
 
     }
+
+
+
+
+
+
+
+
+
+
+    /*
+     * converter for DTOs
+     * */
 
 
     private static EmployeeDTO convertEntityToEmployeeDTO(Employee employee){
@@ -95,6 +110,14 @@ public class UserController {
     private static CustomerDTO convertEntityToCustomerDTO(Customer customer){
         CustomerDTO customerDTO = new CustomerDTO();
         BeanUtils.copyProperties(customer,customerDTO);
+        if(customer.getPetList()!=null){
+            List<Long> petIds = new ArrayList<>();
+            for(Pet pet: customer.getPetList() ){
+                petIds.add(pet.getId());
+            }
+            customerDTO.setPetIds(petIds);
+        }
+
         return customerDTO;
     }
 

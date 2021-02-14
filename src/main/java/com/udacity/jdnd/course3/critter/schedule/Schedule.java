@@ -15,14 +15,15 @@ public class Schedule {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "schedule_id")
     private long id;
 
 
-    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "schedule",cascade = CascadeType.ALL)
     private List<Employee> employees;
 
 
-    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY,mappedBy = "schedule",cascade = CascadeType.ALL)
     private List<Pet> pets;
 
     private LocalDate date;

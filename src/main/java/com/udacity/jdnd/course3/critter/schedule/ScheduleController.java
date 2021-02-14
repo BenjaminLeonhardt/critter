@@ -34,6 +34,20 @@ public class ScheduleController {
     @PostMapping
     public ScheduleDTO createSchedule(@RequestBody ScheduleDTO scheduleDTO) {
         Schedule schedule = convertScheduleDTOToEntity(scheduleDTO);
+        for(Employee employee:schedule.getEmployees()){
+            if(employee.getSchedule()==null){
+                employee.setSchedule(new ArrayList<>());
+            }
+            employee.getSchedule().add(schedule);
+        }
+
+        for(Pet pet:schedule.getPets()){
+            if(pet.getSchedule()==null){
+                pet.setSchedule(new ArrayList<>());
+            }
+            pet.getSchedule().add(schedule);
+        }
+
         Schedule newSchedule = scheduleService.save(schedule);
         return convertEntityToScheduleDTO(newSchedule);
     }

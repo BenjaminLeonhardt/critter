@@ -1,5 +1,6 @@
 package com.udacity.jdnd.course3.critter.user;
 
+import com.udacity.jdnd.course3.critter.schedule.Schedule;
 import org.hibernate.annotations.Nationalized;
 
 import javax.persistence.*;
@@ -12,6 +13,9 @@ import java.util.Set;
 @Inheritance(strategy=InheritanceType.TABLE_PER_CLASS)
 public class Employee extends User{
 
+    @ManyToMany
+    @JoinColumn(name = "schedule_id")
+    List<Schedule> schedule;
 
     @ElementCollection(targetClass = EmployeeSkill.class)
     @Enumerated(EnumType.STRING)
@@ -29,6 +33,14 @@ public class Employee extends User{
         this.name = name;
         this.skills = skills;
         this.daysAvailable = daysAvailable;
+    }
+
+    public List<Schedule> getSchedule() {
+        return schedule;
+    }
+
+    public void setSchedule(List<Schedule> schedule) {
+        this.schedule = schedule;
     }
 
     public Set<EmployeeSkill> getSkills() {

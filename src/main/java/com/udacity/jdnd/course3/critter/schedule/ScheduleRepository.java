@@ -11,10 +11,10 @@ import java.util.List;
 @Transactional
 public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
 
-    @Query("select s from Schedule s inner join s.pets sp where sp.id = :petId")
+    @Query("select s from Schedule s left join s.pets sp where sp.id = :petId")
     public List<Schedule> getScheduleForPet(long petId);
 
-    @Query("select s from Schedule s inner join s.employees se with se.id = :employeeId")
+    @Query("select s from Schedule s left join s.employees se where se.id = :employeeId")
     public List<Schedule> getScheduleForEmployee(long employeeId);
 
     //customer_id

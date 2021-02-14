@@ -1,10 +1,12 @@
 package com.udacity.jdnd.course3.critter.pet;
 
+import com.udacity.jdnd.course3.critter.schedule.Schedule;
 import com.udacity.jdnd.course3.critter.user.Customer;
 import org.hibernate.annotations.Nationalized;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 public class Pet {
@@ -27,6 +29,10 @@ public class Pet {
     @Column(length = 4096)
     private String notes;
 
+    @ManyToMany
+    @JoinColumn(name = "schedule_id")
+    List<Schedule> schedule;
+
     public Pet() {
     }
 
@@ -37,6 +43,15 @@ public class Pet {
         this.owner = owner;
         this.birthDate = birthDate;
         this.notes = notes;
+    }
+
+
+    public List<Schedule> getSchedule() {
+        return schedule;
+    }
+
+    public void setSchedule(List<Schedule> schedule) {
+        this.schedule = schedule;
     }
 
     public long getId() {

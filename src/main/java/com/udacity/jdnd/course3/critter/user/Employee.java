@@ -12,6 +12,7 @@ import java.util.Set;
 @Inheritance(strategy=InheritanceType.TABLE_PER_CLASS)
 public class Employee extends User{
 
+
     @ElementCollection(targetClass = EmployeeSkill.class)
     @Enumerated(EnumType.STRING)
     private Set<EmployeeSkill> skills;

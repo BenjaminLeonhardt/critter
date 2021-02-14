@@ -1,6 +1,8 @@
 package com.udacity.jdnd.course3.critter.user;
 
 import com.udacity.jdnd.course3.critter.pet.Pet;
+import org.hibernate.annotations.Nationalized;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -8,6 +10,8 @@ import java.util.List;
 @Table(name = "customer")
 @Inheritance(strategy=InheritanceType.TABLE_PER_CLASS)
 public class Customer extends User {
+
+
 
     private String phoneNumber;
 

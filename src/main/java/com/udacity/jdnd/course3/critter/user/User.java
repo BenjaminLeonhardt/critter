@@ -10,7 +10,7 @@ import javax.persistence.*;
 public abstract class User {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     protected long id;
 
     @Nationalized

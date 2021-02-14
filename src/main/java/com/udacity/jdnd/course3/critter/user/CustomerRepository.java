@@ -9,7 +9,7 @@ import java.util.List;
 @Repository
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
-    @Query("select c from Customer c left join Pet p on c.id = p.id and p.id = :petId")
+    @Query("select p.owner from Pet p where p.id = :petId")
     public Customer getOwnerByPet(Long petId);
 
 }

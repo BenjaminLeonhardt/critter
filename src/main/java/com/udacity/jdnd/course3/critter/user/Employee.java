@@ -16,7 +16,7 @@ public class Employee extends User{
     @Enumerated(EnumType.STRING)
     private Set<EmployeeSkill> skills;
 
-    @ElementCollection(targetClass = EmployeeSkill.class)
+    @ElementCollection(targetClass = DayOfWeek.class)
     @Enumerated(EnumType.STRING)
     private Set<DayOfWeek> daysAvailable;
 

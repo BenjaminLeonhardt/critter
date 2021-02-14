@@ -10,6 +10,7 @@ import java.time.DayOfWeek;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Handles web requests related to Users.
@@ -70,15 +71,23 @@ public class UserController {
 
     @GetMapping("/employee/availability")
     public List<EmployeeDTO> findEmployeesForService(@RequestBody EmployeeRequestDTO employeeDTO) {
-        Employee employee = new Employee();
-        employee.setSkills(employeeDTO.getSkills());
-        List<Employee> employeeList = employeeService.findEmployeesForService(employee);
-        List<EmployeeDTO> employeeDTOList = new ArrayList<>();
-        for(Employee actualEmployee:employeeList){
-            employeeDTOList.add(convertEntityToEmployeeDTO(actualEmployee));
-        }
-        return employeeDTOList;
+//        Employee employee = new Employee();
+//        employee.setSkills(employeeDTO.getSkills());
+//        List<Employee> employeeList = employeeService.findEmployeesForService(employee);
+//        List<EmployeeDTO> employeeDTOList = new ArrayList<>();
+//        for(Employee actualEmployee:employeeList){
+//            employeeDTOList.add(convertEntityToEmployeeDTO(actualEmployee));
+//        }
+//        return employeeDTOList;
 
+        //List<Employee> employeeList = employeeService.findEmployeesForService(employeeDTO.getDate().getDayOfWeek());
+
+        List<Employee> employeeList = employeeService.findEmployeesForService(employeeDTO.getDate(),employeeDTO.getSkills());
+
+        return employeeList.stream()
+                .filter(employee -> employee.getSkills().containsAll(employeeDTO.getSkills()))
+                .map(UserController::convertEntityToEmployeeDTO)
+                .collect(Collectors.toList());
     }
 
 

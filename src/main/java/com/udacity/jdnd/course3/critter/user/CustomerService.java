@@ -2,6 +2,10 @@ package com.udacity.jdnd.course3.critter.user;
 
 import com.udacity.jdnd.course3.critter.pet.Pet;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -29,10 +33,7 @@ public class CustomerService {
     }
 
     public Customer getOwnerByPet(Long petId){
-        Customer customerList = customerRepository.getOwnerByPet(petId);
-        return customerList;
+        Customer customer = customerRepository.getOwnerByPet(petId);
+        return customer;
     }
-
-
-
 }

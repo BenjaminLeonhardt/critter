@@ -2,12 +2,18 @@ package com.udacity.jdnd.course3.critter.schedule;
 
 import com.udacity.jdnd.course3.critter.pet.Pet;
 import com.udacity.jdnd.course3.critter.pet.PetDTO;
+import com.udacity.jdnd.course3.critter.pet.PetService;
+import com.udacity.jdnd.course3.critter.user.Employee;
+import com.udacity.jdnd.course3.critter.user.EmployeeService;
+import com.udacity.jdnd.course3.critter.user.EmployeeSkill;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Handles web requests related to Schedules.
@@ -18,6 +24,12 @@ public class ScheduleController {
 
     @Autowired
     ScheduleService scheduleService;
+
+    @Autowired
+    EmployeeService employeeService;
+
+    @Autowired
+    PetService petService;
 
     @PostMapping
     public ScheduleDTO createSchedule(@RequestBody ScheduleDTO scheduleDTO) {
@@ -51,7 +63,9 @@ public class ScheduleController {
         List<Schedule> scheduleList = scheduleService.getScheduleForEmployee(employeeId);
         List<ScheduleDTO> scheduleDTOList = new ArrayList<>();
         for(Schedule schedule:scheduleList){
-            scheduleDTOList.add(convertEntityToScheduleDTO(schedule));
+            if(schedule!=null){
+                scheduleDTOList.add(convertEntityToScheduleDTO(schedule));
+            }
         }
         return scheduleDTOList;
     }
@@ -77,14 +91,47 @@ public class ScheduleController {
     * converter for DTOs
     * */
 
-    private static ScheduleDTO convertEntityToScheduleDTO(Schedule schedule){
+    private ScheduleDTO convertEntityToScheduleDTO(Schedule schedule){
         ScheduleDTO scheduleDTO = new ScheduleDTO();
+        scheduleDTO.setEmployeeIds(new ArrayList<>());
+        scheduleDTO.setPetIds(new ArrayList<>());
+        scheduleDTO.setActivities(new HashSet<>());
+        if(schedule.getEmployees()!=null){
+            for(Employee employee:schedule.getEmployees()){
+                scheduleDTO.getEmployeeIds().add(employee.getId());
+            }
+        }
+        if(schedule.getPets()!=null){
+            for (Pet pet:schedule.getPets()){
+                scheduleDTO.getPetIds().add(pet.getId());
+            }
+        }
+        if(schedule.getActivities()!=null){
+            for(EmployeeSkill skill:schedule.getActivities()){
+                scheduleDTO.getActivities().add(skill);
+            }
+        }
+
+
+
         BeanUtils.copyProperties(schedule,scheduleDTO);
         return scheduleDTO;
     }
 
-    private static Schedule convertScheduleDTOToEntity(ScheduleDTO scheduleDTO){
+    private Schedule convertScheduleDTOToEntity(ScheduleDTO scheduleDTO){
         Schedule schedule = new Schedule();
+        List<Employee> employeeList = new ArrayList<>();
+        for(long employeeId : scheduleDTO.getEmployeeIds()){
+            employeeList.add(employeeService.get(employeeId));
+        }
+        schedule.setEmployees(employeeList);
+
+        List<Pet> petList = new ArrayList<>();
+        for(long petId : scheduleDTO.getPetIds()){
+            petList.add(petService.get(petId));
+        }
+        schedule.setPets(petList);
+
         BeanUtils.copyProperties(scheduleDTO, schedule);
         return schedule;
     }

@@ -9,13 +9,14 @@ import java.util.List;
 @Repository
 public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
 
-    @Query("select s from Schedule s left join Pet p on s.id = p.id and p.id = :petId")
+    @Query("select s from Schedule s inner join s.pets sp where sp.id = :petId")
     public List<Schedule> getScheduleForPet(long petId);
 
-    @Query("select s from Schedule s left join Employee e on s.id = e.id and e.id = :employeeId")
+    @Query("select distinct s from Schedule s inner join s.employees se with se.id = :employeeId")
     public List<Schedule> getScheduleForEmployee(long employeeId);
 
-    @Query("select s from Schedule s left join Customer c on s.id = c.id and c.id = :customerId")
+    //customer_id
+    @Query("select s from Schedule s inner join s.pets sp where sp.owner.id = :customerId")
     public List<Schedule> getScheduleForCustomer(long customerId);
 
 }
